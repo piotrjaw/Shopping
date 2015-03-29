@@ -1,0 +1,75 @@
+<head>
+  <title>Lista zakupów</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Lista zakupów</h1>
+
+            <form class="erase">
+                <input type="submit" value="Wyczyść listę" />
+            </form>
+            <form class="new-item">
+                <input type="text" id="iteminput" class="item" name="item" placeholder="Wpisz nową pozycję na liście" autocomplete="off"/>
+            </form>
+            <div id="listclickinput">
+                {{#each spanitems}}
+                    {{> tsitem}}
+                {{/each}}
+            </div>
+            <div id="newinput">
+                <form class="add-new-item">
+                    <span>{{nitem}}</span>
+                    <span>Jednostka miary</span>
+                    <input id="kg" type="radio" name="unit" value="kg" />
+                    <label for="kg">kg</label>
+                    <input id="szt" type="radio" name="unit" value="szt" />
+                    <label for="szt">szt</label>
+                    <span>Czy to jednostka główna produktu?</span>
+                    <input id="tak" type="radio" name="mainUnit" value=1 />
+                    <label for="tak">tak</label>
+                    <input id="nie" type="radio" name="mainUnit" value=0 />
+                    <label for="nie">nie</label>
+                    <input type="text" id="ratio" name="ratio" placeholder="Przelicznik na jednostkę" autocomplete="off">
+                    <input type="text" id="quantity" name="quantity" placeholder="Ile kupić" autocomplete="off">
+                    <input type="submit" value="Dodaj do listy">
+               </form>
+            </div>
+            <ul>
+                {{#each tempitems}}
+                    {{> tempitem}}
+                {{/each}}
+            </ul>
+        </header>
+
+        <ul>
+            {{#each items}}
+                {{> item}}
+            {{/each}}
+        </ul>
+    </div>
+</body>
+
+<template name="item">
+    <li class="name {{item}}">
+        <span>{{item}}</span>
+        <span>{{quantity}}</span>
+        <span>{{unit}}</span>
+    </li>
+</template>
+
+<template name="tempitem">
+    <li class="tempitem {{item}}">
+        <span class="span-item">{{item}}</span>
+        <span class="span-unit">{{unit}}</span>
+    </li>
+</template>
+
+<template name="tsitem">
+    <span>{{item}}</span>
+    <form class="new-item-quantity">
+        <input type="text" class="text" name="text" placeholder="Podaj ilość" autocomplete="off"/>
+    </form>
+    <span>{{unit}}</span>
+</template>
