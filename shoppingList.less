@@ -1,0 +1,477 @@
+// Import Vendors
+@import url("vendor/custom.bootstrap.import.less");
+
+@login-text:             #eef2f0;
+@login-focus-text:       #ffffff;
+@login-focus-bg:         #888888;
+@direction:              to bottom;
+@startColor:             #2598cb;
+@endColor:               #cece46;
+@container-color:        #f0f0f0;
+@header-color:           #999999;
+
+.vendor(@property, @value) {
+  -webkit-@{property}: @value;
+  -khtml-@{property}: @value;
+  -moz-@{property}: @value;
+  -ms-@{property}: @value;
+  -o-@{property}: @value;
+  @{property}: @value;
+}
+
+.vertical-align {
+  position: relative;
+  top: 50%;
+  .vendor(transformY, -25%);
+}
+
+body {
+  background-color: #9f9591;
+  background: -webkit-linear-gradient(@direction, @startColor, @endColor);
+  background: -moz-linear-gradient(@direction, @startColor, @endColor);
+  background: -ms-linear-gradient(@direction, @startColor, @endColor);
+  background: -o-linear-gradient(@direction, @startColor, @endColor);
+  background: linear-gradient(@direction, @startColor, @endColor);
+  background-attachment: fixed;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.container{
+  max-width: 600px;
+  min-height: 100%;
+  background-color: @container-color;
+  padding: inherit;
+  background-image: linear-gradient(to bottom, #ffffff, #ffffff, #f8f8f8, #f0f0f0);
+}
+
+header{
+  padding: 20px 20px 20px 20px;
+  margin-top: 0;
+  background-color: @header-color;
+  background-image: linear-gradient(to bottom, #888888, #585858);
+}
+
+h1{
+  font-size: 2em;
+  margin-top: 0;
+  padding-bottom: 10px;
+  color: @login-text;
+}
+
+.flex-container-thrash{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  
+}
+
+.flexbox-wrapper{
+  flex-direction: row;
+  .flex-container-thrash();
+}
+.flex-first{
+  margin-top: 15px;
+}
+
+.flexbox-text{
+  max-width: 460px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 120px;
+}
+
+.flexbox-clear{
+  width: 105px;
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 110px;
+}
+
+.flexbox-in-text {
+  width: 430px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 120px;
+  margin-right: 10px;
+}
+
+.flexbox-in-button {
+  width: 33px;
+  height: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 33px;
+}
+
+.flexbox-item {
+  width: 300px;
+  height: 30px;
+  margin-top: 5px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 120px;
+}
+
+.flexbox-item-left {
+  .flexbox-item();
+  float: left;
+  color: @login-text;
+}
+
+.flexbox-item-right {
+  .flexbox-item();
+  float: right;
+  color: @login-text;
+}
+
+.flexbox-item-right * {
+  float: right;
+}
+
+.erase input{
+  float: right;
+}
+
+.erase * {
+  float: right;
+}
+
+.new-item input{
+  min-width: 120px;
+  font-size: 1.25em;
+}
+
+ul{
+  list-style-type: none;
+}
+
+.flex-col-container{
+  flex-direction: column;
+  .flex-container-thrash();
+}
+
+.flex-row{
+  flex-direction: row;
+  .flex-container-thrash();
+  height: 30px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 25px;
+  max-width: 100%;
+  margin-top: 10px;
+  border-bottom: #eeeeee solid 1px;
+}
+
+.flex-check{
+  width: 10px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 10px;
+}
+
+.flex-name{
+  width: 500px;
+  height: auto;
+  flex-grow: 8;
+  flex-shrink: 0;
+  flex-basis: 200px;
+  float: left;
+}
+
+.flex-quan{
+  width: 75px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 50px;
+  float: right;
+}
+
+.flex-unit{
+  width: 75px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 50px;
+  float: left;
+}
+
+.flex-button{
+  width: 10px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 10px;
+}
+
+.delete{
+  border: none;
+  background: none;
+}
+
+.loginRules{
+  color: @login-text;
+  cursor: pointer;
+  display: block;
+  min-width: 100%;
+  text-decoration: none;
+  padding: 5px 5px 5px 5px;
+}
+
+.focusRules{
+  color: @login-focus-text;
+  text-decoration: none;
+  background-color: @login-focus-bg;
+}
+
+#login-buttons{
+  padding: 10px 15px 15px 15px;
+  background-color: #555555;
+  background-image: linear-gradient(to bottom, #555555, #333333);
+}
+
+.textRules{
+  border: none;
+  background: none;
+}
+
+.login-button{
+  .loginRules();
+  &:hover{
+    .focusRules();
+  }
+}
+
+#back-to-login-link{
+  .loginRules();
+  &:hover{
+    .focusRules();
+  }
+}
+
+.error-message{
+  .loginRules();
+  color: #e91d1a;
+  font-weight: 700;
+  cursor: default;
+}
+
+#login-name-link{
+  .loginRules();
+  font-weight: 700;
+  &:hover{
+    .focusRules();
+  }
+}
+
+#signup-link{
+  .loginRules();
+  font-weight: 700;
+  &:hover{
+    .focusRules();
+  }
+}
+
+#login-sign-in-link{
+  .loginRules();
+  font-weight: 700;
+  &:hover{
+    .focusRules();
+  }
+}
+
+.login-close-text{
+  .loginRules();
+  &:hover{
+    .focusRules();
+  }
+}
+
+#login-dropdown-list div label{
+  font-weight: 100;
+  padding: 0 10px 0 5px;
+  color: @login-text;
+}
+
+#login-dropdown-list div div label{
+  font-weight: 100;
+  padding: 0 10px 0 5px;
+  color: @login-text;
+}
+
+#listclickinput {
+   display: none;
+ }
+
+#newinput {
+  display: none;
+  position: relative;
+  margin-top: 10px;
+}
+
+#ratio {
+  display: none;
+}
+
+.checked {
+  text-decoration: line-through;
+  color: #bbbbbb;
+}
+
+.invisible {
+  display: none;
+}
+
+.temp-ul{
+  padding: 10px 0 10px 0;
+  display: none;
+
+}
+
+.tempitem {
+  max-width: 100%;
+  color: @login-text;
+  margin-bottom: 5px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.tempitem span {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tempitem:hover {
+  background-color: lighten(@header-color, 5%);
+}
+
+.nitem {
+  font-weight: 700;
+  max-width: 100%;
+  color: @login-text;
+  font-size: 1.25em;
+}
+
+.old-item-form {
+  border-bottom: none;
+}
+
+.old-item-name {
+  color: @login-text;
+}
+
+.old-item-unit {
+  color: @login-text;
+}
+
+.old-item-quantity {
+  .textRules();
+  color: @login-text;
+  width: 125px;
+  flex-grow: 2;
+  flex-basis: 100px;
+  margin-right: 5px;
+}
+
+input:focus{
+  outline: #dddddd;
+}
+
+input[type=radio] {
+  display: none;
+}
+
+.board-btn {
+  border: @login-text solid 1px;
+  color: @login-text;
+  background: none;
+  height: 33px;
+  padding: 3px 3px 3px 3px;
+}
+
+.board-btn:hover {
+  background-color: lighten(@header-color, 5%);
+}
+
+.board-btn:active {
+  border: @login-text solid 1px;
+}
+
+input[type="radio"] + label {
+  margin-top: -3px;
+  padding: 5px;
+  cursor: pointer;
+  border: @login-text solid 1px;
+  color: @login-text;
+  margin-left: 5px;
+}
+
+input[type="radio"] + label:hover {
+  background-color: lighten(@header-color, 5%);
+}
+
+input[type="radio"]:checked + label {
+  background-color: lighten(@header-color, 10%);
+}
+
+input[type="text"] {
+  .textRules();
+  border-bottom: solid 1px lighten(@header-color, 10%);
+}
+
+#login-password {
+  .textRules();
+  border-bottom: solid 1px lighten(@header-color, 10%);
+  color: @login-text;
+}
+
+#login-old-password {
+  .textRules();
+  border-bottom: solid 1px lighten(@header-color, 10%);
+  color: @login-text;
+}
+
+#login-password-again {
+  .textRules();
+  border-bottom: solid 1px lighten(@header-color, 10%);
+  color: @login-text;
+}
+
+#login-username {
+  color: @login-text;
+}
+
+#iteminput {
+  color: @login-text;
+}
+
+#iteminput * {
+  float: right;
+}
+
+.add-button {
+  width: 33px;
+  height: 33px;
+}
+
+.add-button:hover {
+  background-color: lighten(@header-color, 5%);
+}
+
+.fa-plus {
+  .vertical-align();
+  float: none;
+}

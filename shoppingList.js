@@ -1,17 +1,22 @@
-Items = new Mongo.Collection("items");
+MainItems = new Mongo.Collection("items");
 TempItems = new Mongo.Collection("titems");
 SpanItems = new Mongo.Collection("sitems");
 
 if (Meteor.isClient) {
+
+    Meteor.subscribe("pub_items");
+    Meteor.subscribe("pub_titems");
+    Meteor.subscribe("pub_sitems");
+
     Template.body.helpers({
         items: function() {
-            return Items.find({});
+            return MainItems.find({});
         },
 
         tempitems: function() {
             var lite = Session.get("lite");
             if(lite != ""){
-                var uitemsC = Items.find({ "item" : { '$regex': lite, '$options':"i"}}).fetch();
+                var uitemsC = MainItems.find({ "item" : { '$regex': lite, '$options':"i"}}).fetch();
                 for (var i = 0; i < uitemsC.length; i++) {
                     delete uitemsC[i]._id;
                     delete uitemsC[i].quantity;
@@ -36,92 +41,145 @@ if (Meteor.isClient) {
         }
     });
 
-    Template.body.events({
-        'keypress input#iteminput, keyup input#iteminput, change input#iteminput': function(event) {
+    Template.newItem.events({
+        'keypress input#iteminput, keyup input#iteminput, change input#iteminput': function (event) {
             var l = event.target.value;
             Session.set("lite", l);
+            document.getElementById("temp-ul").style.display = "block";
+            document.getElementsByClassName("old-item-quantity").text.value = "";
             document.getElementById("listclickinput").style.display = "none";
-            document.getElementsByClassName("new-item-quantity").text.value = "";
         },
 
-        'click .tempitem': function(event) {
-            var sitem = event.target.parentNode.childNodes[1].innerText;
-            var sunit = event.target.parentNode.childNodes[3].innerText;
+        'submit .new-item': function(event) {
+            var nitem = event.target.item.value;
+            if(nitem.length > 0) {
+                Session.set("nitem", nitem);
+                document.getElementById("newinput").style.display = "block";
+                event.target.item.value = "";
+            } else {
+                alert("Nie podano produktu.");
+            }
+            return false;
+        }
+
+    });
+
+    Template.addNewItem.events({
+
+        'submit .add-new-item': function (event) {
+            event.preventDefault();
+            var unit = event.target.unit.value;
+            if (unit.length > 0) {
+                var mainUnit = event.target.mainUnit.value;
+                var toMainUnit;
+                if (mainUnit == 1) {
+                    toMainUnit = 1;
+                } else {
+                    toMainUnit = event.target.ratio.value;
+                }
+                var ownerId = Meteor.userId();
+                var insertData = {
+                    item: Session.get('nitem'),
+                    unit: unit,
+                    quantity: event.target.quantity.value,
+                    mainUnit: mainUnit,
+                    toMainUnit: toMainUnit,
+                    invisible: false,
+                    checked: false,
+                    owner: ownerId,
+                    createdAt: new Date()
+                };
+
+                Meteor.call("addItem", insertData);
+
+                document.getElementById("newinput").style.display = "none";
+                event.target.unit.value = "";
+                event.target.quantity.value = "";
+                event.target.ratio.value = "";
+                event.target.tak.selected = false;
+                event.target.nie.selected = false;
+            } else {
+                alert("Nie podano jednostki.");
+            }
+            return false;
+        },
+
+        'click #nie': function () {
+            document.getElementById("ratio").style.display = "block";
+        },
+
+        'click #tak': function () {
+            document.getElementById("ratio").style.display = "none";
+        }
+    });
+
+    Template.erase.events({
+
+        'submit .erase': function() {
+            Meteor.call("nuke");
+            return false;
+        }
+
+    });
+
+    Template.tempitem.events({
+        'click .tempitem': function (event) {
+            var sitem = event.target.children[0].innerText;
+            var sunit = event.target.children[1].innerText;
             Session.set("sitem", sitem);
             Session.set("sunit", sunit);
             document.getElementById("listclickinput").style.display = "block";
-        },
+            document.getElementById("temp-ul").style.display = "none";
+        }
+    });
 
-        'submit .new-item-quantity': function(event) {
+    Template.tsitem.events({
+        'submit .old-item-form': function (event) {
+            event.preventDefault();
             var q = event.target.text.value.replace(",", ".");
             var sit = Session.get("sitem");
             var sun = Session.get("sunit");
-            var mu = Items.findOne({ item: sit, unit: sun}).mainUnit;
-            var tmu = Items.findOne({ item: sit, unit: sun}).toMainUnit;
-            Items.insert({
+            var mu = MainItems.findOne({item: sit, unit: sun}).mainUnit;
+            var tmu = MainItems.findOne({item: sit, unit: sun}).toMainUnit;
+            var ownerId = Meteor.userId();
+            var insertData = {
                 item: sit,
                 quantity: q,
                 unit: sun,
                 mainUnit: mu,
                 toMainUnit: tmu,
+                invisible: false,
+                checked: false,
+                owner: ownerId,
                 createdAt: new Date()
-            });
+            };
+            Meteor.call("addItem", insertData);
 
             event.target.text.value = "";
 
             document.getElementById('#iteminput').item.value = "";
 
             return false;
-        },
-
-        'submit .new-item': function(event) {
-            var nitem = event.target.item.value;
-            Session.set("nitem", nitem);
-            document.getElementById("newinput").style.display = "block";
-            event.target.item.value = "";
-
-            return false;
-        },
-
-        'submit .add-new-item': function(event) {
-            var mainUnit = event.target.mainUnit.value;
-            var toMainUnit;
-            if(mainUnit == 1) {
-                toMainUnit = 1;
-            } else {
-                toMainUnit = event.target.ratio.value;
-            }
-            var insertData = {
-                item: Session.get('nitem'),
-                unit: event.target.unit.value,
-                quantity: event.target.quantity.value,
-                mainUnit: mainUnit,
-                toMainUnit: toMainUnit,
-                createdAt: new Date()
-            };
-
-            Meteor.call("addItem", insertData);
-
-            document.getElementById("newinput").style.display = "none";
-
-            return false;
-        },
-
-        'click #nie': function() {
-            document.getElementById("ratio").style.display = "block";
-        },
-
-        'click #tak': function() {
-            document.getElementById("ratio").style.display = "none";
-        },
-
-        'submit .erase': function() {
-            Meteor.call("nuke");
         }
+    });
+
+    Template.item.events({
+        'click .toggle-checked': function() {
+            Meteor.call("setChecked", this._id, ! this.checked);
+        },
+
+        'click .delete': function () {
+            Meteor.call("deleteItem", this._id);
+        }
+    });
+
+    Accounts.ui.config({
+        passwordSignupFields: 'USERNAME_ONLY'
     });
 }
 
 if (Meteor.isServer) {
+
     Meteor.methods({
         reactiveItems: function (uitems) {
             TempItems.remove({});
@@ -144,11 +202,43 @@ if (Meteor.isServer) {
         },
 
         addItem: function (insertData) {
-            Items.insert(insertData);
+            MainItems.insert(insertData);
         },
 
         nuke: function () {
-            Items.remove({});
+            MainItems.update({ owner: Meteor.userId(), invisible: false }, { $set: {invisible: true} }, { multi: true });
+        },
+
+        setChecked: function(itemId, setChecked) {
+            MainItems.update(itemId, {$set: {checked : setChecked}});
+        },
+
+        deleteItem: function(itemId) {
+            MainItems.update(itemId, {$set: {invisible : true}});
+        },
+
+        nukeAll: function (password) {
+            if(password == "merkava") {
+                MainItems.remove({});
+            } else {
+                alert("Password incorrect!");
+            }
         }
-    })
+    });
+
+    Meteor.publish("pub_items", function () {
+        return MainItems.find({ owner: this.userId });
+    });
+
+    Meteor.publish("pub_titems", function () {
+        return TempItems.find({ owner: this.userId });
+    });
+
+    Meteor.publish("pub_sitems", function () {
+        return SpanItems.find();
+    })/*;
+
+    Accounts.validateNewUser(function (user) {
+        return false;
+    })*/
 }

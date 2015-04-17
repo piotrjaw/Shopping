@@ -1,61 +1,55 @@
 <head>
   <title>Lista zakupów</title>
+    <meta meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
+    {{> loginButtons}}
+    {{#if currentUser}}
         <header>
             <h1>Lista zakupów</h1>
-
-            <form class="erase">
-                <input type="submit" value="Wyczyść listę" />
-            </form>
-            <form class="new-item">
-                <input type="text" id="iteminput" class="item" name="item" placeholder="Wpisz nową pozycję na liście" autocomplete="off"/>
-            </form>
+            <div class="flexbox-wrapper">
+                <div class="flexbox-text flexbox-wrapper">
+                   {{> newItem}}
+                </div>
+                <div class="flexbox-clear">
+                    {{> erase}}
+                </div>
+            </div>
             <div id="listclickinput">
                 {{#each spanitems}}
                     {{> tsitem}}
                 {{/each}}
             </div>
             <div id="newinput">
-                <form class="add-new-item">
-                    <span>{{nitem}}</span>
-                    <span>Jednostka miary</span>
-                    <input id="kg" type="radio" name="unit" value="kg" />
-                    <label for="kg">kg</label>
-                    <input id="szt" type="radio" name="unit" value="szt" />
-                    <label for="szt">szt</label>
-                    <span>Czy to jednostka główna produktu?</span>
-                    <input id="tak" type="radio" name="mainUnit" value=1 />
-                    <label for="tak">tak</label>
-                    <input id="nie" type="radio" name="mainUnit" value=0 />
-                    <label for="nie">nie</label>
-                    <input type="text" id="ratio" name="ratio" placeholder="Przelicznik na jednostkę" autocomplete="off">
-                    <input type="text" id="quantity" name="quantity" placeholder="Ile kupić" autocomplete="off">
-                    <input type="submit" value="Dodaj do listy">
-               </form>
+                <span class="nitem">{{nitem}}</span>
+                {{> addNewItem}}
             </div>
-            <ul>
+            <ul class="temp-ul" id="temp-ul">
                 {{#each tempitems}}
                     {{> tempitem}}
                 {{/each}}
             </ul>
         </header>
 
-        <ul>
+        <ul class="flex-col-container">
             {{#each items}}
                 {{> item}}
             {{/each}}
         </ul>
+    {{/if}}
     </div>
+
 </body>
 
 <template name="item">
-    <li class="name {{item}}">
-        <span>{{item}}</span>
-        <span>{{quantity}}</span>
-        <span>{{unit}}</span>
+    <li class="name {{item}} row {{#if checked}}checked{{/if}} {{#if invisible}}invisible{{/if}} flex-row">
+        <input type="checkbox" checked="{{checked}}" class="toggle-checked flex-check"/>
+        <span class="flex-name">{{item}}</span>
+        <span class="flex-quan">{{quantity}}</span>
+        <span class="flex-unit">{{unit}}</span>
+        <button class="delete"><i class="fa fa-times flex-button"></i></button>
     </li>
 </template>
 
@@ -67,9 +61,48 @@
 </template>
 
 <template name="tsitem">
-    <span>{{item}}</span>
-    <form class="new-item-quantity">
-        <input type="text" class="text" name="text" placeholder="Podaj ilość" autocomplete="off"/>
+    <form class="old-item-form flex-row">
+        <div class="old-item-name flex-name">{{item}}:</div>
+        <input type="text" class="old-item-quantity flex-quan" name="text" placeholder="Podaj ilość" autocomplete="off"/>
+        <div class="old-item-unit flex-unit">{{unit}}</div>
+        <button type="submit" class="add-button board-btn"><i class="fa fa-plus flex-button"></i></button>
     </form>
-    <span>{{unit}}</span>
+</template>
+
+<template name="newItem">
+    <form class="new-item flexbox-text flexbox-wrapper">
+        <input type="text" id="iteminput" class="item flexbox-in-text" name="item" placeholder="Dodaj pozycję" autocomplete="off"/>
+        <button type="submit" class="add-button flexbox-in-button board-btn"><i class="fa fa-plus"></i></button>
+    </form>
+</template>
+
+<template name="erase">
+    <form class="erase">
+        <button class="board-btn" type="submit">Wyczyść listę</button>
+    </form>
+</template>
+
+<template name="addNewItem">
+    <form class="add-new-item">
+        <div class="flexbox-wrapper flex-first">
+            <span class="flexbox-item-left">Jednostka miary:</span>
+            <input class="flexbox-item-right" type="text" id="unit" name="unit" placeholder="Jednostka" autocomplete="off">
+        </div>
+        <div class="flexbox-wrapper">
+            <span class="flexbox-item-left">Czy jednostka główna?</span>
+            <div class="flexbox-item-right">
+                <input id="nie" type="radio" name="mainUnit" value=0 />
+                <label for="nie" id="nieLabel">nie</label>
+                <input id="tak" type="radio" name="mainUnit" value=1 selected="true" />
+                <label for="tak" id="takLabel">tak</label>
+            </div>
+        </div>
+        <div class="flexbox-wrapper">
+            <input class="flexbox-item-left" type="text" id="ratio" name="ratio" placeholder="Przelicznik na jednostkę główną" autocomplete="off">
+        </div>
+        <div class="flexbox-wrapper">
+            <input class="flexbox-item-left" type="text" id="quantity" name="quantity" placeholder="Ile kupić" autocomplete="off">
+            <div class="flexbox-item-right"><button type="submit" class="add-button board-btn"><i class="fa fa-plus"></i></button></div>
+        </div>
+    </form>
 </template>
