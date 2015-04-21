@@ -90,14 +90,15 @@ if (Meteor.isClient) {
                     createdAt: new Date()
                 };
 
-                Meteor.call("addItem", insertData);
-
-                document.getElementById("newinput").style.display = "none";
                 event.target.unit.value = "";
                 event.target.quantity.value = "";
                 event.target.ratio.value = "";
-                event.target.tak.selected = false;
-                event.target.nie.selected = false;
+                $('#tak').prop("checked", false);
+                $('#nie').prop("checked", false);
+                document.getElementById("newinput").style.display = "none";
+
+                Meteor.call("addItem", insertData);
+
             } else {
                 alert("Nie podano jednostki.");
             }
@@ -153,11 +154,12 @@ if (Meteor.isClient) {
                 owner: ownerId,
                 createdAt: new Date()
             };
-            Meteor.call("addItem", insertData);
 
             event.target.text.value = "";
+            $('#iteminput').val('');
+            document.getElementById("listclickinput").style.display = "none";
 
-            document.getElementById('#iteminput').item.value = "";
+            Meteor.call("addItem", insertData);
 
             return false;
         }
@@ -218,8 +220,24 @@ if (Meteor.isServer) {
         },
 
         nukeAll: function (password) {
-            if(password == "merkava") {
+            if(Package.sha.SHA256(password) == "cb37de38abbd2567895e2b53166af4109252034ccc9902399c119477dfd75b3c") {
                 MainItems.remove({});
+            } else {
+                alert("Password incorrect!");
+            }
+        },
+
+        nukeMine: function (password) {
+            if(Package.sha.SHA256(password) == "cb37de38abbd2567895e2b53166af4109252034ccc9902399c119477dfd75b3c") {
+                MainItems.remove({ owner: Meteor.userId() });
+            } else {
+                alert("Password incorrect!");
+            }
+        },
+
+        showAll: function (password) {
+            if(Package.sha.SHA256(password) == "cb37de38abbd2567895e2b53166af4109252034ccc9902399c119477dfd75b3c") {
+                return MainItems.find({});
             } else {
                 alert("Password incorrect!");
             }
