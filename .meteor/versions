@@ -9,6 +9,7 @@ blaze-tools@1.0.3-rc.0
 boilerplate-generator@1.0.3-rc.0
 callback-hook@1.0.3-rc.0
 check@1.0.5-rc.0
+d3@1.0.0
 ddp@1.1.0-rc.1
 deps@1.0.7-rc.0
 ejson@1.0.6-rc.0

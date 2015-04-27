@@ -5,39 +5,46 @@
 
 <body>
 <div class="container">
-    {{> loginButtons}}
+    <div class="flexbox-wrapper ultra-header">
+        <div class="flexbox-login">{{> loginButtons}}</div>
+        <div class="flexbox-pause"></div>
+        <div class="flexbox-stats"><button class="board-btn" id="stats-btn">Statystyki</button></div>
+    </div>
+    <div class="stats" id="stats"></div>
     {{#if currentUser}}
-        <header>
-            <h1>Lista zakupów</h1>
-            <div class="flexbox-wrapper">
-                <div class="flexbox-text flexbox-wrapper">
-                   {{> newItem}}
+        <div id="content">
+            <header>
+                <h1>Lista zakupów</h1>
+                <div class="flexbox-wrapper">
+                    <div class="flexbox-text flexbox-wrapper">
+                       {{> newItem}}
+                    </div>
+                    <div class="flexbox-clear">
+                        {{> erase}}
+                    </div>
                 </div>
-                <div class="flexbox-clear">
-                    {{> erase}}
+                <div id="listclickinput">
+                    {{#each spanitems}}
+                        {{> tsitem}}
+                    {{/each}}
                 </div>
-            </div>
-            <div id="listclickinput">
-                {{#each spanitems}}
-                    {{> tsitem}}
-                {{/each}}
-            </div>
-            <div id="newinput">
-                <span class="nitem">{{nitem}}</span>
-                {{> addNewItem}}
-            </div>
-            <ul class="temp-ul" id="temp-ul">
-                {{#each tempitems}}
-                    {{> tempitem}}
+                <div id="newinput">
+                    <span class="nitem">{{nitem}}</span>
+                    {{> addNewItem}}
+                </div>
+                <ul class="temp-ul" id="temp-ul">
+                    {{#each tempitems}}
+                        {{> tempitem}}
+                    {{/each}}
+                </ul>
+            </header>
+
+            <ul class="flex-col-container">
+                {{#each items}}
+                    {{> item}}
                 {{/each}}
             </ul>
-        </header>
-
-        <ul class="flex-col-container">
-            {{#each items}}
-                {{> item}}
-            {{/each}}
-        </ul>
+        </div>
     {{/if}}
     </div>
 

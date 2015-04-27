@@ -9,6 +9,8 @@
 @endColor:               #cece46;
 @container-color:        #f0f0f0;
 @header-color:           #999999;
+@ultra-header-color:     #555555;
+@stats-bg:               #777777;
 
 .vendor(@property, @value) {
   -webkit-@{property}: @value;
@@ -237,11 +239,51 @@ ul{
   background-color: @login-focus-bg;
 }
 
-#login-buttons{
+.flexbox-login{
   padding: 10px 15px 15px 15px;
-  background-color: #555555;
-  background-image: linear-gradient(to bottom, #555555, #333333);
+  width: 75px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 50px;
+  float: left;
 }
+
+.flexbox-pause{
+  width: 150px;
+  height: auto;
+  flex-grow: 2;
+  flex-shrink: 0;
+  flex-basis: 100px;
+}
+
+.flexbox-stats{
+  padding: 10px 15px 15px 15px;
+  width: 75px;
+  height: auto;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 50px;
+  float: right;
+  * {
+    float: right;
+  }
+}
+
+.ultra-header {
+  background-color: @ultra-header-color;
+  background-image: linear-gradient(to bottom, @ultra-header-color, #333333);
+  padding: 5px;
+  button {
+    &:hover {
+      background-color: lighten(@ultra-header-color, 5%);
+    }
+  }
+}
+
+/*.ultra-header button:hover {
+  background-color: lighten(#555555, 15 %);
+}*/
 
 .textRules{
   border: none;
@@ -474,4 +516,15 @@ input[type="text"] {
 .fa-plus {
   .vertical-align();
   float: none;
+}
+
+.stats{
+  background-color: @stats-bg;
+  background-image: linear-gradient(to bottom, @stats-bg, #555555);
+  height: 1000px;
+  display: none;
+}
+
+#content {
+  display: block;
 }

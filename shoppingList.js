@@ -45,16 +45,20 @@ if (Meteor.isClient) {
         'keypress input#iteminput, keyup input#iteminput, change input#iteminput': function (event) {
             var l = event.target.value;
             Session.set("lite", l);
-            document.getElementById("temp-ul").style.display = "block";
+//            document.getElementById("temp-ul").style.display = "block";
+            $("#temp-ul").slideDown("fast");
             document.getElementsByClassName("old-item-quantity").text.value = "";
-            document.getElementById("listclickinput").style.display = "none";
+//            document.getElementById("listclickinput").style.display = "none";
+            $("#listclickinput").slideUp("fast");
         },
 
         'submit .new-item': function(event) {
             var nitem = event.target.item.value;
             if(nitem.length > 0) {
                 Session.set("nitem", nitem);
-                document.getElementById("newinput").style.display = "block";
+//                document.getElementById("newinput").style.display = "block";
+                $("#newinput").slideDown("fast");
+                $("#temp-ul").slideUp("fast");
                 event.target.item.value = "";
             } else {
                 alert("Nie podano produktu.");
@@ -95,7 +99,8 @@ if (Meteor.isClient) {
                 event.target.ratio.value = "";
                 $('#tak').prop("checked", false);
                 $('#nie').prop("checked", false);
-                document.getElementById("newinput").style.display = "none";
+//                document.getElementById("newinput").style.display = "none";
+                $('#newinput').slideUp("fast");
 
                 Meteor.call("addItem", insertData);
 
@@ -106,11 +111,13 @@ if (Meteor.isClient) {
         },
 
         'click #nie': function () {
-            document.getElementById("ratio").style.display = "block";
+//            document.getElementById("ratio").style.display = "block";
+            $("#ratio").slideDown("fast");
         },
 
         'click #tak': function () {
-            document.getElementById("ratio").style.display = "none";
+//            document.getElementById("ratio").style.display = "none";
+            $("#ratio").slideUp("fast");
         }
     });
 
@@ -129,8 +136,10 @@ if (Meteor.isClient) {
             var sunit = event.target.children[1].innerText;
             Session.set("sitem", sitem);
             Session.set("sunit", sunit);
-            document.getElementById("listclickinput").style.display = "block";
-            document.getElementById("temp-ul").style.display = "none";
+//            document.getElementById("listclickinput").style.display = "block";
+            $("#listclickinput").slideDown("fast");
+//            document.getElementById("temp-ul").style.display = "none";
+            $("#temp-ul").slideUp("fast");
         }
     });
 
@@ -157,7 +166,8 @@ if (Meteor.isClient) {
 
             event.target.text.value = "";
             $('#iteminput').val('');
-            document.getElementById("listclickinput").style.display = "none";
+//            document.getElementById("listclickinput").style.display = "none";
+            $("#listclickinput").slideUp("fast");
 
             Meteor.call("addItem", insertData);
 
@@ -173,6 +183,33 @@ if (Meteor.isClient) {
         'click .delete': function () {
             Meteor.call("deleteItem", this._id);
         }
+    });
+
+    Template.body.events({
+       'click h1': function() {
+           $("#temp-ul").slideUp("fast");
+           $("#listclickinput").slideUp("fast");
+           $("#ratio").slideUp("fast").val("");
+           $("#newinput").slideUp("fast");
+           $("#tak").prop("checked", false);
+           $("#nie").prop("checked", false);
+           $("#unit").val("");
+           $("#quantity").val("");
+           $("#iteminput").val("");
+       },
+
+       'click #stats-btn':function() {
+           if($("#content").is(":visible")) {
+               $("#content").slideUp(200, function() {
+                   $("#stats").slideDown(200);
+               });
+           } else {
+               $("#stats").slideUp(200, function() {
+                   $("#content").slideDown(200);
+               });
+           }
+
+       }
     });
 
     Accounts.ui.config({
